@@ -1149,13 +1149,15 @@ button {
 
 .cards {
   flex: 1;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+  min-width: 0;
+  display: flex;
   gap: 6px;
-  max-width: calc(6 * 76px + 5 * 6px);
 }
 
 .card {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 76px;
   position: relative;
   overflow: hidden;
   display: flex;
@@ -1283,6 +1285,24 @@ button {
   place-items: center;
   margin: 0;
   font-size: 18px;
+}
+
+@media (max-width: 380px) {
+  .pts {
+    min-width: 50px;
+  }
+  .dock-row {
+    gap: 6px;
+  }
+  .cards {
+    gap: 4px;
+  }
+  .card .nm {
+    font-size: 11px;
+  }
+  .card .cost {
+    font-size: 10.5px;
+  }
 }
 
 @media (min-width: 700px) {

@@ -162,6 +162,37 @@ try {
     check('설치 정보(manifest)', man.name === '땅따먹기 대작전' && man.icons.length >= 3);
     await pc.close();
   }
+  if (!only || only === 'rounds') {
+    // 뒤쪽 라운드: 저장된 진행을 r라운드로 맞춰 두고 시작 (벽·금화·움직이는 팻말·보스·1대2)
+    for (const r of [3, 5, 7, 10]) {
+      const w = r === 10 ? 360 : 390;
+      const ctx = await browser.newContext({ viewport: { width: w, height: 780 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
+      await ctx.addInitScript((round) => localStorage.setItem('flip-wars:v1', JSON.stringify({ v: 1, round, best: round - 1, tutorial: true })), r);
+      const page = await ctx.newPage();
+      page.on('pageerror', (e) => errors.push(String(e)));
+      page.on('console', (m) => m.type() === 'error' && errors.push(m.text()));
+      await page.goto(`${base}?e2e`);
+      await page.waitForFunction(() => !!window.__fw);
+      await page.tap('[data-go="adventure"]');
+      await waitPhase(page, 'play');
+      await page.evaluate(() => window.__fw.ff(10));
+      await page.waitForTimeout(700);
+      await page.screenshot({ path: out(`m-round-${r}.png`) });
+      const st = await page.evaluate(() => window.__fw.state());
+      const label = (await page.textContent('.hud-label')) ?? '';
+      const cards = await page.locator('.card').count();
+      console.log(`round ${r}: ${label} · 팀 ${st.teams.length} · 카드 ${cards} · 판 ${st.cols}×${st.rows} · 공 ${st.balls}`);
+      if (r === 5) check('5라운드는 보스전', label.includes('보스'));
+      if (r === 7) check('7라운드는 1대2', st.teams.length === 3 && label.includes('1 대 2'));
+      if (r === 10) {
+        check('10라운드: 카드 6장 모두 열림', cards === 6);
+        const overflow = await page.evaluate(() => [...document.querySelectorAll('.card')].some((c) => c.getBoundingClientRect().right > window.innerWidth + 0.5));
+        check('좁은 휴대폰(360px)에서도 카드가 화면 안에', !overflow);
+      }
+      await ctx.close();
+    }
+  }
+
   check('오류 없음', errors.length === 0, errors.slice(0, 3).join(' | '));
 } catch (e) {
   check('실행', false, e instanceof Error ? e.stack : String(e));

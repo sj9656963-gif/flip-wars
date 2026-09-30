@@ -116,6 +116,7 @@ export class GameView {
   private cannons: CannonView[] = [];
   private gates: GateView[] = [];
   private coins: THREE.InstancedMesh | null = null;
+  private coinHalo: THREE.InstancedMesh | null = null;
   private goldTiles: number[] = [];
   private aims: AimView[] = [];
   private readonly m4 = new THREE.Matrix4();
@@ -125,6 +126,7 @@ export class GameView {
   private readonly col = new THREE.Color();
   private readonly white = new THREE.Color(0xffffff);
   private readonly axisX = new THREE.Vector3(1, 0, 0);
+  private readonly axisY = new THREE.Vector3(0, 1, 0);
   private readonly axisZ = new THREE.Vector3(0, 0, 1);
   private readonly ndc = new THREE.Vector2();
 
@@ -429,15 +431,26 @@ export class GameView {
     this.goldTiles = [];
     for (let i = 0; i < g.n; i++) if (g.gold[i]) this.goldTiles.push(i);
     const coins = new THREE.InstancedMesh(
-      this.keep(new THREE.CylinderGeometry(0.26, 0.26, 0.07, 20).rotateX(Math.PI / 2)),
-      this.keep(new THREE.MeshStandardMaterial({ color: GOLD_COLOR, metalness: 0.65, roughness: 0.25, emissive: 0x6b4700, emissiveIntensity: 0.6 })),
+      this.keep(new THREE.CylinderGeometry(0.34, 0.34, 0.09, 22).rotateX(Math.PI / 2)),
+      this.keep(new THREE.MeshStandardMaterial({ color: GOLD_COLOR, metalness: 0.55, roughness: 0.25, emissive: 0xffa000, emissiveIntensity: 0.75 })),
       Math.max(1, this.goldTiles.length),
     );
     coins.count = this.goldTiles.length;
     coins.frustumCulled = false;
     this.keep(coins);
     this.coins = coins;
-    root.add(coins);
+    // 금화 칸 바닥의 노란 빛
+    const halo = new THREE.InstancedMesh(
+      this.keep(new THREE.PlaneGeometry(1.3, 1.3).rotateX(-Math.PI / 2)),
+      this.keep(new THREE.MeshBasicMaterial({ map: this.glowTex, color: GOLD_COLOR, transparent: true, opacity: 0.8, depthWrite: false, blending: THREE.AdditiveBlending, toneMapped: false })),
+      Math.max(1, this.goldTiles.length),
+    );
+    halo.count = this.goldTiles.length;
+    halo.frustumCulled = false;
+    halo.renderOrder = 1;
+    this.keep(halo);
+    this.coinHalo = halo;
+    root.add(coins, halo);
   }
 
   private buildAims(g: Game, root: THREE.Group): void {
@@ -966,22 +979,29 @@ export class GameView {
 
   private updateCoins(g: Game): void {
     const coins = this.coins;
-    if (!coins || !this.goldTiles.length) return;
+    const halo = this.coinHalo;
+    if (!coins || !halo || !this.goldTiles.length) return;
     this.goldTiles.forEach((idx, k) => {
       const c = idx % g.cols;
       const r = (idx - c) / g.cols;
       if (!g.gold[idx]) {
         this.m4.makeScale(0, 0, 0);
-      } else {
-        this.q.setFromAxisAngle(this.axisX.set(0, 1, 0), this.time * 2.2 + k);
-        this.axisX.set(1, 0, 0);
-        this.v3.set(c + 0.5, TILE_H + 0.42 + Math.sin(this.time * 3 + k) * 0.06, r + 0.5);
-        this.s3.set(1, 1, 1);
-        this.m4.compose(this.v3, this.q, this.s3);
+        coins.setMatrixAt(k, this.m4);
+        halo.setMatrixAt(k, this.m4);
+        return;
       }
+      this.q.setFromAxisAngle(this.axisY, this.time * 2.2 + k);
+      this.v3.set(c + 0.5, TILE_H + 0.55 + Math.sin(this.time * 3 + k) * 0.08, r + 0.5);
+      this.s3.set(1, 1, 1);
+      this.m4.compose(this.v3, this.q, this.s3);
       coins.setMatrixAt(k, this.m4);
+      const p = 0.9 + 0.15 * Math.sin(this.time * 4 + k);
+      this.m4.makeScale(p, 1, p);
+      this.m4.setPosition(c + 0.5, TILE_H + 0.02, r + 0.5);
+      halo.setMatrixAt(k, this.m4);
     });
     coins.instanceMatrix.needsUpdate = true;
+    halo.instanceMatrix.needsUpdate = true;
   }
 
   private updateAims(g: Game): void {

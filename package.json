@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "start": "vite build && vite preview --open",
     "test": "vitest run",
-    "e2e": "node e2e/visual.mjs"
+    "e2e": "node e2e/visual.mjs",
+    "e2e:pwa": "node e2e/pwa.mjs"
   },
   "dependencies": {
     "three": "0.186.1"
