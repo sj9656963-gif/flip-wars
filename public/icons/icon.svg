@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<rect width="64" height="64" rx="14" fill="#0a0f1e"/>
+<rect x="8" y="8" width="48" height="48" rx="6" fill="#eef2f8"/>
+<rect x="10" y="10" width="44" height="44" rx="4" fill="#141925"/>
+<g fill="#ef4444"><rect x="11" y="11" width="6.5" height="6.5" rx="1.4"/><rect x="18.3" y="11" width="6.5" height="6.5" rx="1.4"/><rect x="25.6" y="11" width="6.5" height="6.5" rx="1.4"/><rect x="32.9" y="11" width="6.5" height="6.5" rx="1.4"/><rect x="40.2" y="11" width="6.5" height="6.5" rx="1.4"/><rect x="47.5" y="11" width="6.5" height="6.5" rx="1.4"/>
+<rect x="11" y="18.3" width="6.5" height="6.5" rx="1.4"/><rect x="25.6" y="18.3" width="6.5" height="6.5" rx="1.4"/><rect x="32.9" y="18.3" width="6.5" height="6.5" rx="1.4"/><rect x="40.2" y="18.3" width="6.5" height="6.5" rx="1.4"/><rect x="47.5" y="18.3" width="6.5" height="6.5" rx="1.4"/>
+<rect x="11" y="25.6" width="6.5" height="6.5" rx="1.4"/><rect x="25.6" y="25.6" width="6.5" height="6.5" rx="1.4"/><rect x="40.2" y="25.6" width="6.5" height="6.5" rx="1.4"/></g>
+<g fill="#3b82f6"><rect x="18.3" y="25.6" width="6.5" height="6.5" rx="1.4"/><rect x="32.9" y="25.6" width="6.5" height="6.5" rx="1.4"/><rect x="47.5" y="25.6" width="6.5" height="6.5" rx="1.4"/>
+<rect x="11" y="32.9" width="6.5" height="6.5" rx="1.4"/><rect x="18.3" y="32.9" width="6.5" height="6.5" rx="1.4"/><rect x="25.6" y="32.9" width="6.5" height="6.5" rx="1.4"/><rect x="32.9" y="32.9" width="6.5" height="6.5" rx="1.4"/><rect x="40.2" y="32.9" width="6.5" height="6.5" rx="1.4"/><rect x="47.5" y="32.9" width="6.5" height="6.5" rx="1.4"/>
+<rect x="11" y="40.2" width="6.5" height="6.5" rx="1.4"/><rect x="18.3" y="40.2" width="6.5" height="6.5" rx="1.4"/><rect x="25.6" y="40.2" width="6.5" height="6.5" rx="1.4"/><rect x="32.9" y="40.2" width="6.5" height="6.5" rx="1.4"/><rect x="40.2" y="40.2" width="6.5" height="6.5" rx="1.4"/><rect x="47.5" y="40.2" width="6.5" height="6.5" rx="1.4"/>
+<rect x="11" y="47.5" width="6.5" height="6.5" rx="1.4"/><rect x="18.3" y="47.5" width="6.5" height="6.5" rx="1.4"/><rect x="25.6" y="47.5" width="6.5" height="6.5" rx="1.4"/><rect x="32.9" y="47.5" width="6.5" height="6.5" rx="1.4"/><rect x="40.2" y="47.5" width="6.5" height="6.5" rx="1.4"/><rect x="47.5" y="47.5" width="6.5" height="6.5" rx="1.4"/></g>
+<circle cx="36" cy="30" r="5.5" fill="#9cc8ff" opacity=".45"/><circle cx="36" cy="30" r="2.8" fill="#fff"/>
+</svg>
